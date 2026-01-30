@@ -195,4 +195,76 @@
   .pdf-scroll::-webkit-scrollbar-thumb:hover {
     background: #a8a8a8;
   }
+
+  /* Sticky video player animations */
+  @keyframes slideInUp {
+    from {
+      transform: translateY(100px);
+      opacity: 0;
+    }
+    to {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+
+  @keyframes slideDown {
+    0% {
+      transform: translateY(-100%) scale(0.95);
+      opacity: 0;
+    }
+    50% {
+      transform: translateY(-50%) scale(0.98);
+      opacity: 0.5;
+    }
+    100% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+    }
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+
+  @keyframes pulse {
+    0%, 100% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+  }
+
+  .animate-in {
+    animation-duration: 0.5s;
+    animation-fill-mode: both;
+  }
+
+  .slide-in-from-bottom-4 {
+    animation-name: slideInUp;
+  }
+
+  .fade-in {
+    animation-name: fadeIn;
+  }
+
+  /* Smooth scroll behavior */
+  html {
+    scroll-behavior: smooth;
+  }
+
+  /* Hardware acceleration for smooth animations */
+  .transform,
+  .transition-transform,
+  .transition-all {
+    will-change: transform;
+    backface-visibility: hidden;
+    perspective: 1000px;
+  }
 }
