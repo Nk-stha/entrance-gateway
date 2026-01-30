@@ -1,6 +1,9 @@
 import type { Metadata } from "next";
 import { Inter, Roboto } from "next/font/google";
 import "./globals.css";
+import { NavbarExample } from "@/components/layout/Navbar/Navbar.example";
+import { Footer } from "@/components/layout/Footer";
+import { ProgressBar } from "@/components/shared/Loading";
 
 const inter = Inter({
   variable: "--font-sans",
@@ -29,9 +32,12 @@ export default function RootLayout({
   return (
     <html lang="en" className="scroll-smooth">
       <body
-        className={`${inter.variable} ${roboto.variable} antialiased`}
+        className={`${inter.variable} ${roboto.variable} antialiased min-h-screen flex flex-col`}
       >
+        <ProgressBar />
+        <NavbarExample />
         {children}
+        <Footer />
       </body>
     </html>
   );
