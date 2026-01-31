@@ -156,19 +156,28 @@ function NavbarNotificationButton({ onClick }: { onClick?: () => void }) {
 function NavbarUserMenuButton({ avatar, name }: { avatar: string; name: string }) {
   const { isUserMenuOpen, toggleUserMenu } = use(NavbarContext)!
 
+  // Check if avatar is a URL or a single character (initial)
+  const isInitial = avatar.length === 1
+
   return (
     <div className="relative">
       <button
         onClick={toggleUserMenu}
         className="flex items-center gap-2 rounded-full hover:bg-gray-100 p-1 pr-3 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-brand-blue"
       >
-        <Image
-          src={avatar}
-          alt={name}
-          width={32}
-          height={32}
-          className="size-8 rounded-full bg-gray-200 ring-2 ring-gray-200"
-        />
+        {isInitial ? (
+          <div className="size-8 rounded-full bg-brand-blue flex items-center justify-center text-white text-sm font-bold ring-2 ring-gray-200">
+            {avatar}
+          </div>
+        ) : (
+          <Image
+            src={avatar}
+            alt={name}
+            width={32}
+            height={32}
+            className="size-8 rounded-full bg-gray-200 ring-2 ring-gray-200"
+          />
+        )}
         <div className="hidden sm:block text-left">
           <div className="text-sm font-medium text-gray-900">{name}</div>
           <div className="text-xs text-gray-500">User</div>
@@ -196,7 +205,7 @@ function NavbarUserMenu({ children }: { children: React.ReactNode }) {
   if (!isUserMenuOpen) return null
 
   return (
-    <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 transition-all">
+    <div className="absolute right-0 top-full mt-2 w-56 origin-top-right rounded-lg bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 z-50">
       {children}
     </div>
   )
@@ -284,18 +293,26 @@ function NavbarMobileMenu({ items }: { items: NavItem[] }) {
 
           {/* Mobile Menu Footer */}
           <div className="border-t border-gray-200 px-4 py-6 space-y-3 bg-gray-50">
-            <button className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-gold hover:bg-yellow-400 text-brand-navy font-bold rounded-lg transition-colors shadow-sm">
+            <Link
+              href="/signin"
+              onClick={closeMobileMenu}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-gold hover:bg-yellow-400 text-brand-navy font-bold rounded-lg transition-colors shadow-sm"
+            >
               <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
                 <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
               </svg>
               Sign In
-            </button>
-            <button className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-brand-navy text-brand-navy font-semibold rounded-lg hover:bg-brand-navy hover:text-white transition-colors">
+            </Link>
+            <Link
+              href="/signup"
+              onClick={closeMobileMenu}
+              className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-brand-navy text-brand-navy font-semibold rounded-lg hover:bg-brand-navy hover:text-white transition-colors"
+            >
               <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
                 <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
               </svg>
               Sign Up
-            </button>
+            </Link>
           </div>
         </div>
       </div>

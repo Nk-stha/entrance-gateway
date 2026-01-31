@@ -1,6 +1,11 @@
 'use client'
 
+import { useState, useEffect } from 'react'
+import Link from 'next/link'
 import { Navbar } from './Navbar'
+import { fetchUserProfile } from '@/services/client/user.client'
+import { isAuthenticated, getUserId } from '@/lib/auth/client'
+import type { User } from '@/types/user.types'
 
 /**
  * Example usage of the Navbar compound component
@@ -20,16 +25,51 @@ const navigationItems = [
   { label: 'Trainings', href: '/trainings' },
 ]
 
-const userMenuItems = [
-  { label: 'Your profile', href: '/profile' },
-  { label: 'Settings', href: '/settings' },
-  { label: 'Sign out', href: '/logout' },
-]
-
 export function NavbarExample() {
+  const [userData, setUserData] = useState<User | null>(null)
+  const [isLoadingUser, setIsLoadingUser] = useState(true)
+
+  useEffect(() => {
+    // Check if user is authenticated
+    if (isAuthenticated()) {
+      loadUserData()
+    } else {
+      setIsLoadingUser(false)
+    }
+  }, [])
+
+  const loadUserData = async () => {
+    try {
+      const response = await fetchUserProfile()
+      setUserData(response.data)
+      console.log('👤 Navbar: User data loaded')
+    } catch (error) {
+      console.error('❌ Navbar: Failed to load user data:', error)
+    } finally {
+      setIsLoadingUser(false)
+    }
+  }
+
   const handleNotificationClick = () => {
     console.log('Notification clicked')
   }
+
+  const handleSignOut = async () => {
+    try {
+      // Call logout API to clear cookies
+      await fetch('/api/auth/logout', { method: 'POST' })
+      console.log('👋 User signed out')
+      window.location.href = '/signin'
+    } catch (error) {
+      console.error('Logout error:', error)
+      // Force redirect even if logout fails
+      window.location.href = '/signin'
+    }
+  }
+
+  // Get user display name
+  const userName = userData?.fullname || 'User'
+  const userInitial = userName.charAt(0).toUpperCase()
 
   return (
     <Navbar.Provider>
@@ -49,20 +89,60 @@ export function NavbarExample() {
 
           {/* Actions (Notifications + User Menu) */}
           <Navbar.Actions>
-            <Navbar.NotificationButton onClick={handleNotificationClick} />
-            
-            <Navbar.UserMenuButton
-              avatar="/vercel.svg"
-              name="Nilkesh Shrestha"
-            />
-            
-            <Navbar.UserMenu>
-              {userMenuItems.map((item) => (
-                <Navbar.UserMenuItem key={item.href} href={item.href}>
-                  {item.label}
-                </Navbar.UserMenuItem>
-              ))}
-            </Navbar.UserMenu>
+            {isAuthenticated() ? (
+              <>
+                <Navbar.NotificationButton onClick={handleNotificationClick} />
+                
+                {isLoadingUser ? (
+                  <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
+                ) : (
+                  <div className="relative">
+                    <Navbar.UserMenuButton
+                      avatar={userInitial}
+                      name={userName}
+                    />
+                    
+                    <Navbar.UserMenu>
+                      <Navbar.UserMenuItem href="/profile">
+                        <div className="flex items-center gap-2">
+                          <svg viewBox="0 0 24 24" fill="currentColor" className="size-4 text-gray-500">
+                            <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                          </svg>
+                          <span>Profile</span>
+                        </div>
+                      </Navbar.UserMenuItem>
+                      
+                      <button
+                        onClick={handleSignOut}
+                        className="w-full text-left block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 focus:bg-gray-50 focus:outline-hidden transition-colors"
+                      >
+                        <div className="flex items-center gap-2">
+                          <svg viewBox="0 0 24 24" fill="currentColor" className="size-4 text-gray-500">
+                            <path d="M17 7l-1.41 1.41L18.17 11H8v2h10.17l-2.58 2.58L17 17l5-5zM4 5h8V3H4c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h8v-2H4V5z" />
+                          </svg>
+                          <span>Logout</span>
+                        </div>
+                      </button>
+                    </Navbar.UserMenu>
+                  </div>
+                )}
+              </>
+            ) : (
+              <div className="flex items-center gap-3">
+                <Link
+                  href="/signin"
+                  className="text-sm font-medium text-gray-700 hover:text-brand-navy transition-colors"
+                >
+                  Sign In
+                </Link>
+                <Link
+                  href="/signup"
+                  className="text-sm font-medium text-white bg-brand-gold hover:bg-[#FFB300] px-4 py-2 rounded-lg transition-colors"
+                >
+                  Sign Up
+                </Link>
+              </div>
+            )}
           </Navbar.Actions>
         </Navbar.Container>
 

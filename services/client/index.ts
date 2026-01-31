@@ -22,3 +22,5 @@ export {
   getPendingEmail,
   clearPendingEmail,
 } from './auth.client'
+export { fetchBlogs, fetchBlogById } from './blogs.client'
+export { fetchUserProfile, updateUserProfile } from './user.client'

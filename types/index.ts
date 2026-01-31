@@ -47,3 +47,10 @@ export type {
   BlogDetailResponse,
   BlogsQueryParams,
 } from './blogs.types'
+
+export type {
+  User,
+  UserResponse,
+  UpdateUserRequest,
+  UpdateUserResponse,
+} from './user.types'

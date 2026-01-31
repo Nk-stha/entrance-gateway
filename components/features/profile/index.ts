@@ -1,0 +1,6 @@
+export { ProfilePageContent } from './ProfilePageContent'
+export { ProfileSidebar } from './ProfileSidebar'
+export { ProfileHeader } from './ProfileHeader'
+export { PersonalInfoForm } from './PersonalInfoForm'
+export { EducationalBackgroundForm } from './EducationalBackgroundForm'
+export { ChangePasswordForm } from './ChangePasswordForm'

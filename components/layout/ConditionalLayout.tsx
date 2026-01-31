@@ -8,7 +8,9 @@ export function ConditionalLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname()
   
   // Check if current path is an auth page
-  const isAuthPage = pathname?.startsWith('/signup') || pathname?.startsWith('/signin')
+  const isAuthPage = pathname?.startsWith('/signup') || 
+                     pathname?.startsWith('/signin') || 
+                     pathname?.startsWith('/verify-otp')
 
   // Auth pages: no navbar/footer, full screen
   if (isAuthPage) {
