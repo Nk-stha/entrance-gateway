@@ -224,7 +224,7 @@ function NavbarUserMenuItem({ href, children }: { href: string; children: React.
 }
 
 // Mobile Menu
-function NavbarMobileMenu({ items }: { items: NavItem[] }) {
+function NavbarMobileMenu({ items, isAuthenticated = false }: { items: NavItem[]; isAuthenticated?: boolean }) {
   const { isMobileMenuOpen, closeMobileMenu } = use(NavbarContext)!
   const pathname = usePathname()
 
@@ -291,29 +291,31 @@ function NavbarMobileMenu({ items }: { items: NavItem[] }) {
             </div>
           </div>
 
-          {/* Mobile Menu Footer */}
-          <div className="border-t border-gray-200 px-4 py-6 space-y-3 bg-gray-50">
-            <Link
-              href="/signin"
-              onClick={closeMobileMenu}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-gold hover:bg-yellow-400 text-brand-navy font-bold rounded-lg transition-colors shadow-sm"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
-                <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
-              </svg>
-              Sign In
-            </Link>
-            <Link
-              href="/signup"
-              onClick={closeMobileMenu}
-              className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-brand-navy text-brand-navy font-semibold rounded-lg hover:bg-brand-navy hover:text-white transition-colors"
-            >
-              <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
-                <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
-              </svg>
-              Sign Up
-            </Link>
-          </div>
+          {/* Mobile Menu Footer - Only show auth buttons if not authenticated */}
+          {!isAuthenticated && (
+            <div className="border-t border-gray-200 px-4 py-6 space-y-3 bg-gray-50">
+              <Link
+                href="/signin"
+                onClick={closeMobileMenu}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 bg-brand-gold hover:bg-yellow-400 text-brand-navy font-bold rounded-lg transition-colors shadow-sm"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                  <path d="M12 12c2.21 0 4-1.79 4-4s-1.79-4-4-4-4 1.79-4 4 1.79 4 4 4zm0 2c-2.67 0-8 1.34-8 4v2h16v-2c0-2.66-5.33-4-8-4z" />
+                </svg>
+                Sign In
+              </Link>
+              <Link
+                href="/signup"
+                onClick={closeMobileMenu}
+                className="w-full flex items-center justify-center gap-2 px-4 py-3 border-2 border-brand-navy text-brand-navy font-semibold rounded-lg hover:bg-brand-navy hover:text-white transition-colors"
+              >
+                <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
+                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z" />
+                </svg>
+                Sign Up
+              </Link>
+            </div>
+          )}
         </div>
       </div>
     </>

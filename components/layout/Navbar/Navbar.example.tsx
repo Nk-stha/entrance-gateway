@@ -89,7 +89,7 @@ export function NavbarExample() {
               <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
             </Navbar.Actions>
           </Navbar.Container>
-          <Navbar.MobileMenu items={navigationItems} />
+          <Navbar.MobileMenu items={navigationItems} isAuthenticated={false} />
         </Navbar.Frame>
       </Navbar.Provider>
     )
@@ -111,7 +111,7 @@ export function NavbarExample() {
           {/* Desktop navigation */}
           <Navbar.DesktopNav items={navigationItems} />
 
-          {/* Actions (Notifications + User Menu) */}
+          {/* Actions (Notifications + User Menu) - Only show for authenticated users */}
           <Navbar.Actions>
             {isLoadingUser ? (
               <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
@@ -149,27 +149,12 @@ export function NavbarExample() {
                   </Navbar.UserMenu>
                 </div>
               </>
-            ) : (
-              <div className="flex items-center gap-3">
-                <Link
-                  href="/signin"
-                  className="text-sm font-medium text-gray-700 hover:text-brand-navy transition-colors"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="text-sm font-medium text-white bg-brand-gold hover:bg-[#FFB300] px-4 py-2 rounded-lg transition-colors"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
+            ) : null}
           </Navbar.Actions>
         </Navbar.Container>
 
-        {/* Mobile menu */}
-        <Navbar.MobileMenu items={navigationItems} />
+        {/* Mobile menu - Pass user authentication state */}
+        <Navbar.MobileMenu items={navigationItems} isAuthenticated={!!userData} />
       </Navbar.Frame>
     </Navbar.Provider>
   )

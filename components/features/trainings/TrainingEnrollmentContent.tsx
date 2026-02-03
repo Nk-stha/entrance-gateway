@@ -818,22 +818,22 @@ export function TrainingEnrollmentContent({ trainingId, initialData }: TrainingE
 
               {/* Step 3: Review */}
               {currentStep === 'review' && (
-                <div className="space-y-6">
+                <div className="space-y-4 md:space-y-6">
                   {/* Success Message */}
-                  <div className="bg-semantic-success/10 border-l-4 border-semantic-success rounded-r-lg p-6 mb-6">
-                    <div className="flex items-start gap-4">
+                  <div className="bg-semantic-success/10 border-l-4 border-semantic-success rounded-r-lg p-4 md:p-6 mb-4 md:mb-6">
+                    <div className="flex items-start gap-3 md:gap-4">
                       <div className="flex-shrink-0">
-                        <div className="size-12 rounded-full bg-semantic-success flex items-center justify-center">
-                          <svg viewBox="0 0 24 24" fill="currentColor" className="size-7 text-white">
+                        <div className="size-10 md:size-12 rounded-full bg-semantic-success flex items-center justify-center">
+                          <svg viewBox="0 0 24 24" fill="currentColor" className="size-6 md:size-7 text-white">
                             <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                           </svg>
                         </div>
                       </div>
                       <div className="flex-1">
-                        <h3 className="text-lg font-bold text-semantic-success mb-2">
+                        <h3 className="text-base md:text-lg font-bold text-semantic-success mb-1 md:mb-2">
                           Payment Submitted Successfully!
                         </h3>
-                        <p className="text-sm text-gray-700 leading-relaxed">
+                        <p className="text-xs md:text-sm text-gray-700 leading-relaxed">
                           Your payment has been submitted and is being processed. You will receive a confirmation email shortly with your enrollment details.
                         </p>
                       </div>
@@ -841,44 +841,44 @@ export function TrainingEnrollmentContent({ trainingId, initialData }: TrainingE
                   </div>
 
                   <div>
-                    <h2 className="text-lg md:text-xl font-bold text-brand-navy mb-4 font-heading">
+                    <h2 className="text-base md:text-lg lg:text-xl font-bold text-brand-navy mb-3 md:mb-4 font-heading">
                       Enrollment Summary
                     </h2>
                     
                     {/* Personal Info Summary */}
-                    <div className="mb-6">
-                      <h3 className="text-sm font-bold text-gray-900 mb-3">Personal Information</h3>
-                      <div className="grid grid-cols-2 gap-3 text-sm">
-                        <div>
+                    <div className="mb-4 md:mb-6">
+                      <h3 className="text-xs md:text-sm font-bold text-gray-900 mb-2 md:mb-3">Personal Information</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
+                        <div className="break-words">
                           <span className="text-gray-500">Name:</span>
-                          <span className="ml-2 font-medium">{userData.fullname}</span>
+                          <span className="ml-2 font-medium break-all">{userData.fullname}</span>
                         </div>
-                        <div>
+                        <div className="break-words">
                           <span className="text-gray-500">Email:</span>
-                          <span className="ml-2 font-medium">{userData.email}</span>
+                          <span className="ml-2 font-medium break-all">{userData.email}</span>
                         </div>
-                        <div>
+                        <div className="break-words">
                           <span className="text-gray-500">Contact:</span>
-                          <span className="ml-2 font-medium">{userData.contact}</span>
+                          <span className="ml-2 font-medium break-all">{userData.contact}</span>
                         </div>
-                        <div>
+                        <div className="break-words">
                           <span className="text-gray-500">Address:</span>
-                          <span className="ml-2 font-medium">{userData.address}</span>
+                          <span className="ml-2 font-medium break-all">{userData.address}</span>
                         </div>
                       </div>
                     </div>
 
                     {/* Training Summary */}
-                    <div className="mb-6 pb-6 border-b border-gray-200">
-                      <h3 className="text-sm font-bold text-gray-900 mb-3">Training Details</h3>
-                      <div className="grid grid-cols-2 gap-3 text-sm">
-                        <div>
+                    <div className="mb-4 md:mb-6 pb-4 md:pb-6 border-b border-gray-200">
+                      <h3 className="text-xs md:text-sm font-bold text-gray-900 mb-2 md:mb-3">Training Details</h3>
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 md:gap-3 text-xs md:text-sm">
+                        <div className="break-words">
                           <span className="text-gray-500">Training:</span>
-                          <span className="ml-2 font-medium">{training.trainingName}</span>
+                          <span className="ml-2 font-medium break-words">{training.trainingName}</span>
                         </div>
-                        <div>
+                        <div className="break-words">
                           <span className="text-gray-500">Category:</span>
-                          <span className="ml-2 font-medium">{training.trainingCategory}</span>
+                          <span className="ml-2 font-medium break-words">{training.trainingCategory}</span>
                         </div>
                         <div>
                           <span className="text-gray-500">Duration:</span>
@@ -892,29 +892,29 @@ export function TrainingEnrollmentContent({ trainingId, initialData }: TrainingE
                     </div>
 
                     {/* Payment Information */}
-                    <div className="mb-6">
-                      <h3 className="text-sm font-bold text-gray-900 mb-3">Payment Information</h3>
-                      <div className="space-y-3 text-sm">
-                        <div className="flex justify-between">
+                    <div className="mb-4 md:mb-6">
+                      <h3 className="text-xs md:text-sm font-bold text-gray-900 mb-2 md:mb-3">Payment Information</h3>
+                      <div className="space-y-2 md:space-y-3 text-xs md:text-sm">
+                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                           <span className="text-gray-500">Payment Method:</span>
-                          <span className="font-medium">{paymentData.paymentMethod === 'FONE_PAY_QR' ? 'FonePay QR' : 'Bank Transfer'}</span>
+                          <span className="font-medium break-words">{paymentData.paymentMethod === 'FONE_PAY_QR' ? 'FonePay QR' : 'Bank Transfer'}</span>
                         </div>
-                        <div className="flex justify-between">
+                        <div className="flex flex-col sm:flex-row sm:justify-between gap-1">
                           <span className="text-gray-500">Amount:</span>
                           <span className="font-medium">NPR {paymentData.amount.toLocaleString()}</span>
                         </div>
                         <div>
                           <span className="text-gray-500">Remarks:</span>
-                          <p className="mt-1 text-gray-900 bg-gray-50 p-2 rounded text-xs">{paymentData.remarks}</p>
+                          <p className="mt-1 text-gray-900 bg-gray-50 p-2 rounded text-xs break-words">{paymentData.remarks}</p>
                         </div>
                         {paymentData.proofFile && (
                           <div>
                             <span className="text-gray-500">Payment Proof:</span>
-                            <div className="mt-1 flex items-center gap-2 bg-gray-50 p-2 rounded">
-                              <svg viewBox="0 0 24 24" fill="currentColor" className="size-4 text-semantic-success">
+                            <div className="mt-1 flex flex-wrap items-center gap-2 bg-gray-50 p-2 rounded">
+                              <svg viewBox="0 0 24 24" fill="currentColor" className="size-4 text-semantic-success flex-shrink-0">
                                 <path d="M9 16.17L4.83 12l-1.42 1.41L9 19 21 7l-1.41-1.41z" />
                               </svg>
-                              <span className="text-xs font-medium">{paymentData.proofFile.name}</span>
+                              <span className="text-xs font-medium break-all">{paymentData.proofFile.name}</span>
                               <span className="text-xs text-gray-500">({(paymentData.proofFile.size / 1024).toFixed(1)} KB)</span>
                             </div>
                           </div>
@@ -923,17 +923,10 @@ export function TrainingEnrollmentContent({ trainingId, initialData }: TrainingE
                     </div>
                   </div>
 
-                  <div className="pt-4 md:pt-6 flex justify-center">
-                    <button
-                      type="button"
-                      onClick={handleBack}
-                      className="w-full sm:w-auto border-2 border-gray-300 text-gray-700 font-semibold py-3 px-6 md:px-8 rounded-lg hover:bg-gray-50 transition-all text-sm md:text-base order-2 sm:order-1"
-                    >
-                      Back
-                    </button>
+                  <div className="pt-4 md:pt-6 flex flex-col sm:flex-row gap-3 justify-center">
                     <button
                       type="submit"
-                      className="w-full sm:w-auto bg-brand-gold hover:bg-[#EBB000] text-brand-navy font-bold py-3 px-8 md:px-12 rounded-lg shadow-md transition-all uppercase tracking-wide text-sm md:text-base flex items-center justify-center gap-2"
+                      className="w-full sm:w-auto bg-brand-gold hover:bg-[#EBB000] text-brand-navy font-bold py-3 px-6 md:px-8 lg:px-12 rounded-lg shadow-md transition-all uppercase tracking-wide text-sm md:text-base flex items-center justify-center gap-2"
                     >
                       <span>Back to Training Details</span>
                       <svg viewBox="0 0 24 24" fill="currentColor" className="size-5">
