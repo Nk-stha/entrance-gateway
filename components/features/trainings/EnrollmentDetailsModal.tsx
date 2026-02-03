@@ -1,9 +1,9 @@
 'use client'
 
-import type { TrainingEnrollmentResponse } from '@/types/trainings.types'
+import type { TrainingEnrollment } from '@/types/trainings.types'
 
 interface EnrollmentDetailsModalProps {
-  enrollmentData: TrainingEnrollmentResponse['data']
+  enrollmentData: TrainingEnrollment
   onClose: () => void
 }
 

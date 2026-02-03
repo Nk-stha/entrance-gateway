@@ -54,25 +54,32 @@ export interface ApiErrorResponse {
 }
 
 // Training Enrollment Types
+export interface TrainingEnrollment {
+  enrollmentId: number
+  userId: number
+  userName: string
+  trainingId: number
+  trainingName: string
+  status: 'PENDING' | 'PAYMENT_PENDING' | 'PAYMENT_RECEIVED_ADMIN_APPROVAL_PENDING' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED' | 'PAYMENT_FAILED' | 'EXPIRED' | 'SUSPENDED'
+  enrollmentDate: string
+  completionDate: string | null
+  paidAmount: number
+  paymentReference: string | null
+  paymentMethod: string | null
+  progressPercentage: number
+  remarks: string | null
+  createdAt: string
+  updatedAt: string
+}
+
 export interface TrainingEnrollmentResponse {
   message: string
-  data: {
-    enrollmentId: number
-    userId: number
-    userName: string
-    trainingId: number
-    trainingName: string
-    status: 'PENDING' | 'PAYMENT_PENDING' | 'PAYMENT_RECEIVED_ADMIN_APPROVAL_PENDING' | 'ACTIVE' | 'COMPLETED' | 'CANCELLED' | 'PAYMENT_FAILED' | 'EXPIRED' | 'SUSPENDED'
-    enrollmentDate: string
-    completionDate: string | null
-    paidAmount: number
-    paymentReference: string | null
-    paymentMethod: string | null
-    progressPercentage: number
-    remarks: string | null
-    createdAt: string
-    updatedAt: string
-  } | null
+  data: TrainingEnrollment | null
+}
+
+export interface TrainingEnrollmentsListResponse {
+  message: string
+  data: TrainingEnrollment[]
 }
 
 // Payment Response Types
