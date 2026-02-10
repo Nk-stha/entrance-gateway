@@ -1,6 +1,7 @@
 'use client'
 
 import Link from 'next/link'
+import Image from 'next/image'
 import { SignInForm } from './SignInForm'
 import { AuthSidebar } from './AuthSidebar'
 
@@ -16,11 +17,8 @@ export function SignInPageContent() {
           {/* Form Container */}
           <div className="w-full max-w-md space-y-8">
             {/* Mobile Logo */}
-            <div className="lg:hidden flex justify-center sm:justify-start items-center gap-2 mb-8">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="size-8 text-brand-navy">
-                <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
-              </svg>
-              <span className="font-bold text-xl text-brand-navy font-heading">EntranceGateway</span>
+            <div className="lg:hidden flex justify-center sm:justify-start mb-8">
+              <Image src="/eg-logo.jpg" alt="EntranceGateway" width={180} height={50} className="h-10 w-auto" priority />
             </div>
 
             {/* Header */}

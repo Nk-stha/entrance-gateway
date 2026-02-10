@@ -2,6 +2,7 @@
 
 import { useState } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { SignUpForm } from './SignUpForm'
 import { AuthSidebar } from './AuthSidebar'
 
@@ -15,11 +16,8 @@ export function SignUpPageContent() {
       <div className="w-full lg:w-1/2 flex flex-col bg-white overflow-y-auto">
         <div className="flex-1 flex flex-col justify-center py-12 px-6 sm:px-12 lg:px-24 xl:px-32">
           {/* Mobile Logo */}
-          <div className="lg:hidden flex items-center gap-2 mb-8">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="size-8 text-brand-blue">
-              <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
-            </svg>
-            <span className="font-bold text-xl text-brand-navy font-heading">EntranceGateway</span>
+          <div className="lg:hidden flex items-center mb-8">
+            <Image src="/eg-logo.jpg" alt="EntranceGateway" width={180} height={50} className="h-10 w-auto" priority />
           </div>
 
           {/* Form Container */}

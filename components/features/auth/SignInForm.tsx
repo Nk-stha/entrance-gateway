@@ -1,6 +1,6 @@
 'use client'
 
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useRouter, useSearchParams } from 'next/navigation'
 import Link from 'next/link'
 import { FormInput } from '@/components/shared/Form/FormInput'
@@ -11,7 +11,7 @@ import { useToast } from '@/components/shared/Toast'
 export function SignInForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const { success, error: showError } = useToast()
+  const { success, error: showError, info } = useToast()
   const [formData, setFormData] = useState({
     email: '',
     password: '',
@@ -19,6 +19,20 @@ export function SignInForm() {
 
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<Record<string, string>>({})
+
+  // Show toast message if redirected from protected route
+  useEffect(() => {
+    const reason = searchParams.get('reason')
+    const redirect = searchParams.get('redirect')
+    
+    if (reason === 'auth_required') {
+      if (redirect?.includes('/enroll')) {
+        info('Please sign in to enroll in this training')
+      } else {
+        info('Please sign in to access this page')
+      }
+    }
+  }, [searchParams, info])
 
   // Validation functions
   const validateEmail = (value: string): string => {

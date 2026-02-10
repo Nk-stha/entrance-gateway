@@ -7,22 +7,29 @@ const API_BASE_URL = process.env.NEXT_PUBLIC_API_URL || 'https://api.entrancegat
 const protectedPaths = [
 //   '/dashboard',
   '/profile',
+  '/my-enrollments',
 //   '/notes',
 //   '/syllabus',
 //   '/questions',
 //   '/colleges',
 ]
 
+// Dynamic protected patterns (regex-based)
+const protectedPatterns = [
+  /^\/trainings\/[^/]+\/enroll$/, // /trainings/{id}/enroll
+]
+
 // Auth routes that should redirect to home if already logged in
 const authPaths = ['/signin', '/signup']
 
-export async function middleware(request: NextRequest) {
+export async function proxy(request: NextRequest) {
   const { pathname } = request.nextUrl
   const accessToken = request.cookies.get('accessToken')?.value
   const refreshToken = request.cookies.get('refreshToken')?.value
   
   // Check if current path is protected
-  const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path))
+  const isProtectedPath = protectedPaths.some(path => pathname.startsWith(path)) ||
+                          protectedPatterns.some(pattern => pattern.test(pathname))
   const isAuthPath = authPaths.some(path => pathname.startsWith(path))
   
   // Redirect authenticated users away from auth pages
@@ -30,7 +37,7 @@ export async function middleware(request: NextRequest) {
     return NextResponse.redirect(new URL('/', request.url))
   }
   
-  // Allow access to non-protected routes
+  // Allow access to non-protected routes (including auth pages for non-authenticated users)
   if (!isProtectedPath) {
     return NextResponse.next()
   }
@@ -40,6 +47,7 @@ export async function middleware(request: NextRequest) {
     // No tokens - redirect to login
     const loginUrl = new URL('/signin', request.url)
     loginUrl.searchParams.set('redirect', pathname)
+    loginUrl.searchParams.set('reason', 'auth_required')
     return NextResponse.redirect(loginUrl)
   }
   

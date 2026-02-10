@@ -2,9 +2,10 @@
 
 import { useState, useEffect } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Navbar } from './Navbar'
 import { fetchUserProfile } from '@/services/client/user.client'
-import { isAuthenticated, getUserId } from '@/lib/auth/client'
+import { logout } from '@/lib/auth/client'
 import type { User } from '@/types/user.types'
 
 /**
@@ -35,11 +36,8 @@ export function NavbarExample() {
   }, [])
 
   useEffect(() => {
-    // Check if user is authenticated
-    if (mounted && isAuthenticated()) {
+    if (mounted) {
       loadUserData()
-    } else if (mounted) {
-      setIsLoadingUser(false)
     }
   }, [mounted])
 
@@ -47,27 +45,22 @@ export function NavbarExample() {
     try {
       const response = await fetchUserProfile()
       setUserData(response.data)
-      console.log('👤 Navbar: User data loaded')
     } catch (error) {
-      console.error('❌ Navbar: Failed to load user data:', error)
+      setUserData(null)
     } finally {
       setIsLoadingUser(false)
     }
   }
 
   const handleNotificationClick = () => {
-    console.log('Notification clicked')
+    // Handle notification click
   }
 
   const handleSignOut = async () => {
     try {
-      // Call logout API to clear cookies
-      await fetch('/api/auth/logout', { method: 'POST' })
-      console.log('👋 User signed out')
+      await logout()
       window.location.href = '/signin'
     } catch (error) {
-      console.error('Logout error:', error)
-      // Force redirect even if logout fails
       window.location.href = '/signin'
     }
   }
@@ -83,7 +76,9 @@ export function NavbarExample() {
         <Navbar.Frame>
           <Navbar.Container>
             <Navbar.MobileMenuButton />
-            <Navbar.Logo src="/next.svg" alt="EntranceGateway" />
+            <Link href="/" className="flex items-center">
+              <Image src="/eg-logo.jpg" alt="EntranceGateway" width={180} height={50} className="h-10 w-auto" priority />
+            </Link>
             <Navbar.DesktopNav items={navigationItems} />
             <Navbar.Actions>
               <div className="h-8 w-8 rounded-full bg-gray-200 animate-pulse" />
@@ -103,10 +98,9 @@ export function NavbarExample() {
           <Navbar.MobileMenuButton />
 
           {/* Logo */}
-          <Navbar.Logo
-            src="/next.svg"
-            alt="EntranceGateway"
-          />
+          <Link href="/" className="flex items-center">
+            <Image src="/eg-logo.jpg" alt="EntranceGateway" width={180} height={50} className="h-10 w-auto" priority />
+          </Link>
 
           {/* Desktop navigation */}
           <Navbar.DesktopNav items={navigationItems} />
@@ -151,21 +145,21 @@ export function NavbarExample() {
               </>
             ) : (
               // Desktop Auth Buttons - Show when not authenticated
-              <div className="hidden md:flex items-center gap-2">
-                <Link
-                  href="/signin"
-                  className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-brand-navy transition-colors rounded-lg hover:bg-gray-50"
-                >
-                  Sign In
-                </Link>
-                <Link
-                  href="/signup"
-                  className="px-4 py-2 text-sm font-bold bg-brand-gold hover:bg-yellow-400 text-brand-navy rounded-lg transition-colors shadow-sm"
-                >
-                  Sign Up
-                </Link>
-              </div>
-            )}
+              <div className="hidden md:flex items-center gap-3 relative z-10">
+                  <Link
+                    href="/signin"
+                    className="px-4 py-2 text-sm font-medium text-gray-700 hover:text-brand-navy transition-colors rounded-lg hover:bg-gray-50"
+                  >
+                    Sign In
+                  </Link>
+                  <Link
+                    href="/signup"
+                    className="px-4 py-2 text-sm font-bold bg-brand-gold hover:bg-yellow-400 text-brand-navy rounded-lg transition-colors shadow-sm"
+                  >
+                    Sign Up
+                  </Link>
+                </div>
+            )}  
           </Navbar.Actions>
         </Navbar.Container>
 
@@ -187,10 +181,9 @@ export function SimpleNavbar() {
     <Navbar.Provider>
       <Navbar.Frame className="bg-brand-navy">
         <Navbar.Container>
-          <Navbar.Logo
-            src="/next.svg"
-            alt="Your Company"
-          />
+          <Link href="/" className="flex items-center">
+            <Image src="/eg-logo.jpg" alt="EntranceGateway" width={180} height={50} className="h-10 w-auto" />
+          </Link>
           
           <Navbar.DesktopNav
             items={[

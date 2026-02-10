@@ -8,8 +8,6 @@ import type { UserResponse, UpdateUserRequest, UpdateUserResponse } from '@/type
  * Uses Next.js API proxy route with cookie-based auth
  */
 export async function fetchUserProfile(): Promise<UserResponse> {
-  console.log('🔍 Fetching user profile via API proxy...')
-
   const response = await fetch('/api/user/me', {
     method: 'GET',
     headers: {
@@ -19,20 +17,18 @@ export async function fetchUserProfile(): Promise<UserResponse> {
   })
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Failed to fetch user profile' }))
-    console.error('❌ API Error:', error)
-    
-    // If unauthorized, throw specific error
+    // If unauthorized, silently throw (user not logged in - expected)
     if (response.status === 401) {
       throw new Error('UNAUTHORIZED')
     }
     
+    // For other errors, log them
+    const error = await response.json().catch(() => ({ message: 'Failed to fetch user profile' }))
+    console.error('Failed to fetch user profile:', error)
     throw new Error(error.message || 'Failed to fetch user profile')
   }
 
-  const data = await response.json()
-  console.log('✅ User profile fetched successfully')
-  return data
+  return response.json()
 }
 
 /**
@@ -40,8 +36,6 @@ export async function fetchUserProfile(): Promise<UserResponse> {
  * Uses Next.js API proxy route with cookie-based auth
  */
 export async function updateUserProfile(data: UpdateUserRequest): Promise<UpdateUserResponse> {
-  console.log('📤 Updating user profile with data:', data)
-
   const response = await fetch('/api/user/me', {
     method: 'PUT',
     headers: {
@@ -53,18 +47,16 @@ export async function updateUserProfile(data: UpdateUserRequest): Promise<Update
   })
 
   if (!response.ok) {
-    const error = await response.json().catch(() => ({ message: 'Failed to update user profile' }))
-    console.error('❌ Update Error:', error)
-    
-    // If unauthorized, throw specific error
+    // If unauthorized, silently throw (user not logged in - expected)
     if (response.status === 401) {
       throw new Error('UNAUTHORIZED')
     }
     
+    // For other errors, log them
+    const error = await response.json().catch(() => ({ message: 'Failed to update user profile' }))
+    console.error('Failed to update user profile:', error)
     throw new Error(error.message || 'Failed to update user profile')
   }
 
-  const result = await response.json()
-  console.log('✅ User profile updated successfully')
-  return result
+  return response.json()
 }

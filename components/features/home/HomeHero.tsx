@@ -40,7 +40,7 @@ export function HomeHero() {
             </div>
 
             {/* Pause Button Overlay - Bottom Right */}
-            <button
+            {/* <button
               className="absolute bottom-2 right-2 md:bottom-4 md:right-4 z-10 w-10 h-10 md:w-12 md:h-12 rounded-full flex items-center justify-center shadow-lg transition-all duration-300 hover:scale-110"
               style={{ backgroundColor: '#7B2CBF' }}
               aria-label="Pause video"
@@ -48,7 +48,7 @@ export function HomeHero() {
               <svg viewBox="0 0 24 24" fill="currentColor" className="size-5 md:size-6 text-white">
                 <path d="M6 4h4v16H6V4zm8 0h4v16h-4V4z" />
               </svg>
-            </button>
+            </button> */}
           </div>
         </div>
       </div>

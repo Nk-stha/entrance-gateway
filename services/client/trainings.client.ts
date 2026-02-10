@@ -74,7 +74,7 @@ export async function fetchTrainingById(id: string): Promise<TrainingDetailRespo
 
 /**
  * Check if user has an existing enrollment for a training
- * Returns enrollment status if exists, null if not enrolled
+ * Returns enrollment status if exists, null if not enrolled or not authenticated
  */
 export async function checkEnrollmentStatus(trainingId: number): Promise<TrainingEnrollmentResponse | null> {
   // Validate trainingId
@@ -94,6 +94,15 @@ export async function checkEnrollmentStatus(trainingId: number): Promise<Trainin
       },
       cache: 'no-store',
     })
+
+    // Handle unauthenticated users - return null without error
+    if (response.status === 401) {
+      console.log('User not authenticated - no enrollment check')
+      return {
+        message: 'Not authenticated',
+        data: null
+      }
+    }
 
     if (response.status === 404) {
       // No enrollment found

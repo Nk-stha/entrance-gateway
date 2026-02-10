@@ -19,12 +19,12 @@ export function TrainingsDetailSidebar({
   const capacityPercentage = (training.currentParticipants / training.maxParticipants) * 100
   const availableSeats = training.maxParticipants - training.currentParticipants
 
-  // Check enrollment status
-  const isEnrolled = enrollmentStatus?.data !== null
+  // Check enrollment status - be defensive about null/undefined
+  const isEnrolled = !!(enrollmentStatus?.data && enrollmentStatus.data !== null)
   const enrollmentData = enrollmentStatus?.data
-  const isConfirmed = enrollmentData?.status === 'COMPLETED' || enrollmentData?.status === 'ACTIVE'
-  const isPaymentReceived = enrollmentData?.status === 'PAYMENT_RECEIVED_ADMIN_APPROVAL_PENDING'
-  const isPending = enrollmentData?.status === 'PAYMENT_PENDING'
+  const isConfirmed = !!(enrollmentData && (enrollmentData.status === 'COMPLETED' || enrollmentData.status === 'ACTIVE'))
+  const isPaymentReceived = !!(enrollmentData && enrollmentData.status === 'PAYMENT_RECEIVED_ADMIN_APPROVAL_PENDING')
+  const isPending = !!(enrollmentData && enrollmentData.status === 'PAYMENT_PENDING')
 
   return (
     <aside className="lg:sticky lg:top-24">

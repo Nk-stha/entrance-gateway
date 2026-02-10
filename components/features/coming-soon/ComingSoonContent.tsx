@@ -2,6 +2,7 @@
 
 import { useState, FormEvent } from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
 import { useToast } from '@/components/shared/Toast'
 import { Spinner } from '@/components/shared/Loading'
 
@@ -61,19 +62,10 @@ export function ComingSoonContent() {
       {/* Logo Section */}
       <div className="mb-8 sm:mb-12">
         <div className="flex flex-col items-center gap-3">
-          <div className="w-16 h-16 sm:w-20 sm:h-20 bg-brand-navy rounded-2xl flex items-center justify-center shadow-xl shadow-brand-navy/20">
-            <svg viewBox="0 0 24 24" fill="currentColor" className="text-brand-gold size-10 sm:size-12">
-              <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
-            </svg>
-          </div>
-          <div className="flex flex-col">
-            <span className="font-bold text-2xl sm:text-3xl tracking-tight text-brand-navy font-heading">
-              EntranceGateway
-            </span>
-            <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] sm:tracking-[0.25em] uppercase text-brand-blue/70">
-              Nepal's Premier Prep Platform
-            </span>
-          </div>
+          <Image src="/eg-logo.jpg" alt="EntranceGateway" width={200} height={60} className="h-16 sm:h-20 w-auto" priority />
+          <span className="text-[10px] sm:text-[11px] font-bold tracking-[0.2em] sm:tracking-[0.25em] uppercase text-brand-blue/70">
+            Nepal's Premier Prep Platform
+          </span>
         </div>
       </div>
 

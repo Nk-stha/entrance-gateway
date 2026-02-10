@@ -138,20 +138,63 @@ export async function refreshToken() {
 }
 
 /**
- * Logout user (calls Next.js API route)
+ * Logout user (calls Next.js API route and clears all client storage)
  */
 export async function logout() {
-  const response = await fetch('/api/auth/logout', {
-    method: 'POST',
-  })
+  try {
+    // Call server API to clear cookies
+    const response = await fetch('/api/auth/logout', {
+      method: 'POST',
+    })
+    
+    const data = await response.json()
+    
+    if (!response.ok) {
+      throw new Error(data.error || 'Logout failed')
+    }
+    
+    // Clear all client-side storage
+    clearAllClientStorage()
+    
+    return data
+  } catch (error) {
+    // Even if API fails, clear client storage
+    clearAllClientStorage()
+    throw error
+  }
+}
+
+/**
+ * Clear all client-side storage (localStorage, sessionStorage, cookies)
+ */
+function clearAllClientStorage(): void {
+  if (typeof window === 'undefined') return
   
-  const data = await response.json()
-  
-  if (!response.ok) {
-    throw new Error(data.error || 'Logout failed')
+  // Clear localStorage
+  try {
+    localStorage.clear()
+  } catch (e) {
+    // Silently fail
   }
   
-  return data
+  // Clear sessionStorage
+  try {
+    sessionStorage.clear()
+  } catch (e) {
+    // Silently fail
+  }
+  
+  // Clear all cookies (client-side accessible ones)
+  try {
+    const cookies = document.cookie.split(';')
+    cookies.forEach(cookie => {
+      const cookieName = cookie.split('=')[0].trim()
+      // Delete cookie by setting expiry to past date
+      document.cookie = `${cookieName}=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;`
+    })
+  } catch (e) {
+    // Silently fail
+  }
 }
 
 /**

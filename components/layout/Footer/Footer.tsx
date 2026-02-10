@@ -1,4 +1,5 @@
 import Link from 'next/link'
+import Image from 'next/image'
 
 export function Footer() {
   return (
@@ -7,11 +8,8 @@ export function Footer() {
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12">
           {/* Brand Section */}
           <div className="col-span-1 lg:col-span-1">
-            <div className="flex items-center gap-2 mb-6">
-              <svg viewBox="0 0 24 24" fill="currentColor" className="size-8 text-brand-gold">
-                <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
-              </svg>
-              <span className="font-bold text-2xl tracking-tight">EntranceGateway</span>
+            <div className="mb-6">
+              <Image src="/eg-logo.jpg" alt="EntranceGateway" width={180} height={50} className="h-12 w-auto" />
             </div>
             <p className="text-white/60 text-sm leading-relaxed mb-6">
               At EntranceGateway, we provide top-tier E-learning to the services to meet all your

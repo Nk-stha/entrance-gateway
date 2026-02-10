@@ -1,3 +1,5 @@
+import Image from 'next/image'
+
 export function AuthSidebar() {
   return (
     <div className="hidden lg:flex lg:w-1/2 relative bg-brand-navy flex-col justify-between overflow-hidden h-screen">
@@ -14,11 +16,8 @@ export function AuthSidebar() {
       {/* Content */}
       <div className="relative z-10 p-12 flex flex-col h-full justify-between text-white">
         {/* Logo */}
-        <div className="flex items-center gap-2">
-          <svg viewBox="0 0 24 24" fill="currentColor" className="size-8 text-brand-gold">
-            <path d="M5 13.18v4L12 21l7-3.82v-4L12 17l-7-3.82zM12 3L1 9l11 6 9-4.91V17h2V9L12 3z" />
-          </svg>
-          <span className="font-bold text-xl tracking-tight font-heading">EntranceGateway</span>
+        <div>
+          <Image src="/eg-logo.jpg" alt="EntranceGateway" width={180} height={50} className="h-12 w-auto" priority />
         </div>
 
         {/* Main Content */}

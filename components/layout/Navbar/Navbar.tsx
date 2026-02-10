@@ -248,14 +248,7 @@ function NavbarMobileMenu({ items, isAuthenticated = false }: { items: NavItem[]
         <div className="h-full overflow-y-auto flex flex-col">
           {/* Menu Header with Close Button */}
           <div className="flex items-center justify-between px-4 py-4 border-b border-gray-200 bg-brand-navy">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-brand-gold rounded-lg flex items-center justify-center text-brand-navy font-bold text-lg">
-                E
-              </div>
-              <span className="font-bold text-lg text-white tracking-tight">
-                Entrance<span className="text-brand-gold">Gateway</span>
-              </span>
-            </div>
+            <Image src="/eg-logo.jpg" alt="EntranceGateway" width={140} height={40} className="h-8 w-auto" />
             <button
               onClick={closeMobileMenu}
               className="p-2 rounded-lg text-white hover:bg-white/10 transition-colors"

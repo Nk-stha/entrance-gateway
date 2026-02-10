@@ -7,6 +7,7 @@ import { TrainingsDetailSidebar } from './TrainingsDetailSidebar'
 import { EnrollmentDetailsModal } from './EnrollmentDetailsModal'
 import { CenteredSpinner } from '@/components/shared/Loading'
 import { fetchTrainingById, checkEnrollmentStatus } from '@/services/client/trainings.client'
+import { isAuthenticated } from '@/lib/auth/client'
 import type { Training, TrainingDetailResponse, TrainingEnrollmentResponse } from '@/types/trainings.types'
 
 interface TrainingsDetailContentProps {
@@ -42,14 +43,20 @@ export function TrainingsDetailContent({ trainingId, initialData }: TrainingsDet
         }
       }
 
-      // Check enrollment status
+      // Check enrollment status ONLY if user is authenticated
       setIsCheckingEnrollment(true)
       try {
+        // Check if user is logged in before making API call
+        if (!isAuthenticated()) {
+          setEnrollmentStatus(null)
+          setIsCheckingEnrollment(false)
+          return
+        }
+
         const status = await checkEnrollmentStatus(parseInt(trainingId))
         setEnrollmentStatus(status)
-        console.log('Enrollment status:', status)
       } catch (err) {
-        console.error('Error checking enrollment status:', err)
+        setEnrollmentStatus(null)
       } finally {
         setIsCheckingEnrollment(false)
       }
@@ -106,14 +113,14 @@ export function TrainingsDetailContent({ trainingId, initialData }: TrainingsDet
     ? training.syllabusDescription.split(/[,;]/).map(point => point.trim()).filter(Boolean)
     : []
 
-  // Get enrollment status details
-  const isEnrolled = enrollmentStatus?.data !== null
+  // Get enrollment status details - be defensive about null/undefined
+  const isEnrolled = !!(enrollmentStatus?.data && enrollmentStatus.data !== null)
   const enrollmentData = enrollmentStatus?.data
-  const isPending = enrollmentData?.status === 'PAYMENT_PENDING'
-  const isConfirmed = enrollmentData?.status === 'COMPLETED' || enrollmentData?.status === 'ACTIVE'
-  const isPaymentReceived = enrollmentData?.status === 'PAYMENT_RECEIVED_ADMIN_APPROVAL_PENDING'
-  const isExpired = enrollmentData?.status === 'EXPIRED'
-  const isCancelled = enrollmentData?.status === 'CANCELLED'
+  const isPending = !!(enrollmentData && enrollmentData.status === 'PAYMENT_PENDING')
+  const isConfirmed = !!(enrollmentData && (enrollmentData.status === 'COMPLETED' || enrollmentData.status === 'ACTIVE'))
+  const isPaymentReceived = !!(enrollmentData && enrollmentData.status === 'PAYMENT_RECEIVED_ADMIN_APPROVAL_PENDING')
+  const isExpired = !!(enrollmentData && enrollmentData.status === 'EXPIRED')
+  const isCancelled = !!(enrollmentData && enrollmentData.status === 'CANCELLED')
 
   // User can view enrollment details if enrolled
   const canViewEnrollment = isEnrolled
