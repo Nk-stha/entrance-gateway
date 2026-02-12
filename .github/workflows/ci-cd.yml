@@ -153,17 +153,18 @@ jobs:
           EOF"
       
       - name: Pull Docker image
+        env:
+          IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
         run: |
-          IMAGE_FULL="${{ needs.build.outputs.image-full }}"
-          IMAGE_TAG="${{ needs.build.outputs.image-tag }}"
-          echo "Pulling image: ${IMAGE_FULL}:${IMAGE_TAG}"
+          echo "Pulling image: ${IMAGE_NAME}:${IMAGE_TAG}"
           
           sshpass -p "${{ secrets.VPS_PASSWORD }}" \
             ssh -o StrictHostKeyChecking=no \
                 -p ${{ secrets.VPS_SSH_PORT }} \
                 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
                 "cd ${{ secrets.VPS_DEPLOY_PATH }} && \
-                 docker pull ${IMAGE_FULL}:${IMAGE_TAG}"
+                 docker pull ${IMAGE_NAME}:${IMAGE_TAG}"
       
       - name: Stop and remove old containers
         run: |
@@ -219,9 +220,12 @@ jobs:
                  docker system prune -f --volumes"
       
       - name: Deployment summary
+        env:
+          IMAGE_NAME: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          IMAGE_TAG: ${{ needs.build.outputs.image-tag }}
         run: |
           echo "### Deployment Summary" >> $GITHUB_STEP_SUMMARY
           echo "✅ Deployment completed successfully" >> $GITHUB_STEP_SUMMARY
-          echo "- **Image**: \`${{ needs.build.outputs.image-full }}:${{ needs.build.outputs.image-tag }}\`" >> $GITHUB_STEP_SUMMARY
+          echo "- **Image**: \`${IMAGE_NAME}:${IMAGE_TAG}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **VPS**: \`${{ secrets.VPS_HOST }}\`" >> $GITHUB_STEP_SUMMARY
           echo "- **Time**: \`$(date -u '+%Y-%m-%d %H:%M:%S UTC')\`" >> $GITHUB_STEP_SUMMARY
