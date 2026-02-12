@@ -14,7 +14,7 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 
 # Install dependencies using npm ci for reproducible builds
-RUN npm ci --only=production --ignore-scripts && \
+RUN npm ci && \
     npm cache clean --force
 
 # ============================================
