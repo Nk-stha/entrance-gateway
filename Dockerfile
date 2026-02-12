@@ -8,19 +8,24 @@ FROM node:20-alpine AS deps
 # Install libc6-compat for Alpine compatibility
 RUN apk add --no-cache libc6-compat
 
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
+
 WORKDIR /app
 
 # Copy package files for dependency installation
-COPY package.json package-lock.json* ./
+COPY package.json pnpm-lock.yaml pnpm-workspace.yaml* ./
 
-# Install dependencies using npm ci for reproducible builds
-RUN npm ci && \
-    npm cache clean --force
+# Install dependencies
+RUN pnpm install --frozen-lockfile
 
 # ============================================
 # Stage 2: Builder
 # ============================================
 FROM node:20-alpine AS builder
+
+# Install pnpm
+RUN corepack enable && corepack prepare pnpm@latest --activate
 
 WORKDIR /app
 
@@ -35,7 +40,7 @@ ENV NEXT_TELEMETRY_DISABLED=1
 ENV NODE_ENV=production
 
 # Build Next.js application
-RUN npm run build
+RUN pnpm run build
 
 # ============================================
 # Stage 3: Runner (Production)
