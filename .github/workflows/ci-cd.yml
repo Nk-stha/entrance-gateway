@@ -23,7 +23,7 @@ jobs:
     
     outputs:
       image-tag: ${{ steps.meta.outputs.tag }}
-      image-full: ${{ steps.meta.outputs.image }}
+      image-full: ${{ steps.meta.outputs.image-full }}
     
     steps:
       - name: Checkout code
@@ -63,6 +63,7 @@ jobs:
           
           echo "tag=${TAG}" >> $GITHUB_OUTPUT
           echo "image=${IMAGE}" >> $GITHUB_OUTPUT
+          echo "image-full=${IMAGE}" >> $GITHUB_OUTPUT
           echo "branch=${BRANCH}" >> $GITHUB_OUTPUT
           echo "short-sha=${SHORT_SHA}" >> $GITHUB_OUTPUT
           
@@ -153,12 +154,16 @@ jobs:
       
       - name: Pull Docker image
         run: |
+          IMAGE_FULL="${{ needs.build.outputs.image-full }}"
+          IMAGE_TAG="${{ needs.build.outputs.image-tag }}"
+          echo "Pulling image: ${IMAGE_FULL}:${IMAGE_TAG}"
+          
           sshpass -p "${{ secrets.VPS_PASSWORD }}" \
             ssh -o StrictHostKeyChecking=no \
                 -p ${{ secrets.VPS_SSH_PORT }} \
                 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
                 "cd ${{ secrets.VPS_DEPLOY_PATH }} && \
-                 docker pull ${{ needs.build.outputs.image-full }}:${{ needs.build.outputs.image-tag }}"
+                 docker pull ${IMAGE_FULL}:${IMAGE_TAG}"
       
       - name: Stop and remove old containers
         run: |
