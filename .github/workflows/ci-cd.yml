@@ -123,21 +123,6 @@ jobs:
                 docker-compose.yml \
                 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }}:/opt/entrance-gateway-frontend/
       
-      - name: Save previous image tag for rollback
-        run: |
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" \
-            ssh -o StrictHostKeyChecking=no \
-                -p ${{ secrets.VPS_SSH_PORT }} \
-                ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-                "cd /opt/entrance-gateway-frontend && \
-                 if [ -f .env ]; then \
-                   cp .env .env.rollback; \
-                   echo '✅ Saved current .env as .env.rollback'; \
-                   grep IMAGE_TAG .env.rollback || true; \
-                 else \
-                   echo '⚠️ No existing .env found (first deployment)'; \
-                 fi"
-      
       - name: Create .env file
         run: |
           sshpass -p "${{ secrets.VPS_PASSWORD }}" \
@@ -174,45 +159,6 @@ jobs:
                 ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
                 "cd /opt/entrance-gateway-frontend && \
                  docker compose up -d --no-deps frontend 2>&1"
-      
-      - name: Health check and rollback on failure
-        run: |
-          sshpass -p "${{ secrets.VPS_PASSWORD }}" \
-            ssh -o StrictHostKeyChecking=no \
-                -p ${{ secrets.VPS_SSH_PORT }} \
-                ${{ secrets.VPS_USER }}@${{ secrets.VPS_HOST }} \
-                'cd '"/opt/entrance-gateway-frontend"' && \
-                 HEALTHY=false && \
-                 for i in $(seq 1 30); do \
-                   if docker ps --filter "name=entrance-gateway-frontend" --filter "status=running" | grep -q entrance-gateway-frontend; then \
-                     sleep 5; \
-                     if docker exec entrance-gateway-frontend node -e "require('"'"'http'"'"').get('"'"'http://localhost:5000/api/health'"'"', (r) => process.exit(r.statusCode === 200 ? 0 : 1)).on('"'"'error'"'"', () => process.exit(1))" 2>/dev/null; then \
-                       echo "✅ Health check passed"; \
-                       HEALTHY=true; \
-                       break; \
-                     fi; \
-                   fi; \
-                   echo "Waiting for container... ($i/30)"; \
-                   sleep 2; \
-                 done && \
-                 if [ "$HEALTHY" = "false" ]; then \
-                   echo "❌ Health check failed — initiating rollback"; \
-                   docker logs entrance-gateway-frontend --tail=50; \
-                   if [ -f .env.rollback ]; then \
-                     echo "🔄 Rolling back to previous image..."; \
-                     cp .env.rollback .env; \
-                     docker compose up -d --no-deps --force-recreate frontend 2>&1; \
-                     sleep 10; \
-                     if docker ps --filter "name=entrance-gateway-frontend" --filter "status=running" | grep -q entrance-gateway-frontend; then \
-                       echo "✅ Rollback successful"; \
-                     else \
-                       echo "❌ Rollback also failed"; \
-                     fi; \
-                   else \
-                     echo "⚠️ No rollback .env available (was this the first deployment?)"; \
-                   fi; \
-                   exit 1; \
-                 fi'
       
       - name: Verify deployment
         run: |
